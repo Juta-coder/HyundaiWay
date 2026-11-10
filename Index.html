@@ -1,0 +1,568 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<base target="_top">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<title>My Hyundai Way Commitment</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Thai:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --navy:#002C5F; --navy-2:#0b3d78; --sky:#00AAD2; --sand:#E4DCD3;
+    --bg:#F6F3F2; --card:#ffffff; --ink:#1a1f2b; --muted:#5f6675; --line:#e3ded8;
+    --ok:#1a8f5a; --warn:#8a4b00; --warn-bg:#fff4e2; --danger:#c0392b;
+    --radius:16px;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0}
+  body{background:var(--bg);color:var(--ink);font-family:'IBM Plex Sans Thai',system-ui,sans-serif;font-size:16px;line-height:1.5;-webkit-tap-highlight-color:transparent}
+  button{font:inherit;cursor:pointer}
+  input,select,textarea{font:inherit;color:inherit}
+  .hidden{display:none !important}
+
+  /* ---------- Participant layout ---------- */
+  .app{max-width:560px;margin:0 auto;padding:0 16px 48px}
+  .top{background:var(--navy);color:#fff;margin:0 -16px;padding:22px 20px 26px;border-radius:0 0 24px 24px}
+  .eyebrow{font-size:12px;letter-spacing:2px;color:#9fd8ea;font-weight:600}
+  .top h1{margin:4px 0 2px;font-size:24px;line-height:1.25}
+  .top p{margin:0;color:#cfe3f0;font-size:14px}
+  .steps{display:flex;gap:6px;margin-top:16px}
+  .steps span{flex:1;height:5px;border-radius:5px;background:rgba(255,255,255,.22)}
+  .steps span.on{background:var(--sky)}
+
+  .panel{background:var(--card);border-radius:var(--radius);padding:20px 18px;margin-top:16px;box-shadow:0 1px 3px rgba(0,0,0,.05)}
+  .panel h2{margin:0 0 4px;font-size:19px;color:var(--navy)}
+  .panel .sub{margin:0 0 16px;color:var(--muted);font-size:14px}
+  label.f{display:block;font-weight:600;font-size:14px;margin:14px 0 6px}
+  .in{width:100%;padding:12px 14px;border:1.5px solid var(--line);border-radius:12px;background:#fff;outline:none;font-size:16px}
+  .in:focus{border-color:var(--sky);box-shadow:0 0 0 3px rgba(0,170,210,.15)}
+
+  .icons{display:grid;grid-template-columns:repeat(6,1fr);gap:8px}
+  .icons button{aspect-ratio:1;border:1.5px solid var(--line);background:#fff;border-radius:12px;font-size:26px;line-height:1;padding:0}
+  .icons button.sel{border-color:var(--sky);background:#e6f7fb;box-shadow:0 0 0 3px rgba(0,170,210,.2)}
+
+  .btn{display:block;width:100%;border:0;border-radius:14px;padding:15px;font-weight:700;font-size:17px;background:var(--navy);color:#fff;margin-top:18px}
+  .btn:disabled{background:#b9c1cc;cursor:not-allowed}
+  .btn.ghost{background:transparent;color:var(--navy);border:1.5px solid var(--navy)}
+  .btn.sky{background:var(--sky)}
+  .row{display:flex;gap:10px}
+  .row .btn{margin-top:0}
+  .err{color:var(--danger);font-size:13px;margin-top:8px;min-height:1px}
+
+  /* ways */
+  .counter{position:sticky;top:0;z-index:5;background:var(--bg);padding:10px 0 8px;margin:0 -2px;display:flex;align-items:center;justify-content:space-between;gap:8px}
+  .counter b{font-size:15px;color:var(--navy)}
+  .dots{display:flex;gap:6px}
+  .dots i{width:28px;height:28px;border-radius:50%;border:2px dashed #b9c1cc;display:grid;place-items:center;font-style:normal;font-weight:700;font-size:13px;color:#fff}
+  .dots i.on{border:0;background:var(--sky)}
+  .core{margin-top:18px}
+  .core-h{display:flex;align-items:baseline;gap:8px;margin:0 2px 8px}
+  .core-h b{font-size:13px;letter-spacing:1.5px;color:var(--navy)}
+  .core-h small{color:var(--muted);font-size:13px}
+  .way{background:#fff;border:1.5px solid var(--line);border-radius:14px;margin-bottom:10px;overflow:hidden;transition:border-color .15s}
+  .way.sel{border-color:var(--sky);box-shadow:0 0 0 3px rgba(0,170,210,.15)}
+  .way.dim{opacity:.5}
+  .way-head{display:flex;align-items:center;gap:12px;width:100%;text-align:left;background:none;border:0;padding:14px}
+  .way-ico{font-size:26px;width:36px;text-align:center;flex:none}
+  .way-txt{flex:1;min-width:0}
+  .way-txt b{display:block;color:var(--navy);font-size:16px}
+  .way-txt small{display:block;color:var(--muted);font-size:13px;line-height:1.45}
+  .rank{flex:none;width:30px;height:30px;border-radius:50%;border:2px solid var(--line);display:grid;place-items:center;font-weight:700;font-size:14px;color:transparent}
+  .way.sel .rank{background:var(--sky);border-color:var(--sky);color:#fff}
+  .way-action{padding:0 14px 14px}
+  .sentence{background:#f2fafc;border-radius:12px;padding:12px}
+  .sentence .pre,.sentence .post{font-weight:600;color:var(--navy);font-size:14px}
+  .sentence textarea{width:100%;min-height:72px;resize:vertical;border:1.5px solid #cfe7ee;border-radius:10px;padding:10px 12px;margin:6px 0;background:#fff;outline:none;font-size:16px}
+  .sentence textarea:focus{border-color:var(--sky)}
+  .hint{font-size:12px;color:var(--muted);margin-top:4px}
+
+  /* commitment card */
+  .ccard{background:#fff;border-radius:20px;overflow:hidden;box-shadow:0 6px 24px rgba(0,44,95,.15);margin-top:18px}
+  .ccard-h{background:linear-gradient(150deg,var(--navy) 0%,var(--navy-2) 70%,#0e5a96 100%);color:#fff;text-align:center;padding:22px 18px 20px}
+  .ccard-h .av{font-size:58px;line-height:1.15;margin:8px 0 2px}
+  .ccard-h .nick{font-size:26px;font-weight:700}
+  .ccard-h .meta{font-size:14px;color:#cfe3f0}
+  .ccard-i{padding:14px 18px;border-top:1px solid #eee}
+  .ccard-i:first-of-type{border-top:0}
+  .ccard-i .pn{font-size:11px;letter-spacing:1.5px;color:var(--sky);font-weight:700}
+  .ccard-i .wn{font-size:17px;font-weight:700;color:var(--navy);margin:1px 0 4px}
+  .ccard-i .ac{font-size:15px;color:#333;white-space:pre-wrap;word-break:break-word}
+  .ccard-i .ac b{color:var(--ink)}
+  .ccard-f{background:var(--sand);color:var(--navy);text-align:center;font-size:13px;padding:12px}
+
+  .note{display:flex;gap:10px;background:var(--warn-bg);color:var(--warn);border-radius:12px;padding:12px;font-size:13.5px;margin-top:12px}
+  .note b{color:#6b3a00}
+  .okmsg{color:var(--ok);font-weight:600;font-size:14px;margin-top:10px}
+  .link{background:none;border:0;color:var(--muted);text-decoration:underline;font-size:13px;margin:18px auto 0;display:block}
+
+  .modal{position:fixed;inset:0;background:rgba(0,20,45,.82);z-index:50;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:16px;gap:12px}
+  .modal img{max-width:100%;max-height:75vh;border-radius:14px}
+  .modal p{color:#fff;margin:0;text-align:center}
+  .modal .btn{max-width:320px;margin:0}
+
+  .toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);background:var(--ink);color:#fff;padding:10px 16px;border-radius:999px;font-size:14px;z-index:60;max-width:calc(100% - 32px);text-align:center}
+  .spin{display:inline-block;width:16px;height:16px;border:2px solid rgba(255,255,255,.4);border-top-color:#fff;border-radius:50%;animation:sp 0.8s linear infinite;vertical-align:-3px;margin-right:6px}
+  @keyframes sp{to{transform:rotate(360deg)}}
+
+  /* ---------- Wall (projector) ---------- */
+  body.wall{background:#06203f;color:#fff}
+  .wall-wrap{padding:24px 28px 40px}
+  .wall-top{display:flex;gap:24px;align-items:stretch}
+  .wall-title{flex:1;min-width:0}
+  .wall-title h1{margin:4px 0 6px;font-size:40px;line-height:1.15}
+  .wall-title .live{display:inline-flex;align-items:center;gap:8px;color:#9fd8ea;font-size:15px}
+  .wall-title .live i{width:10px;height:10px;border-radius:50%;background:#2fd17e;animation:pulse 1.6s infinite}
+  @keyframes pulse{50%{opacity:.25}}
+  .count{font-size:64px;font-weight:700;line-height:1;color:var(--sky)}
+  .count small{font-size:20px;color:#cfe3f0;font-weight:500}
+  .qrbox{background:#fff;color:var(--navy);border-radius:16px;padding:12px;text-align:center;flex:none}
+  .qrbox #qr{width:160px;height:160px;margin:0 auto}
+  .qrbox #qr img,.qrbox #qr canvas{width:160px !important;height:160px !important}
+  .qrbox b{display:block;font-size:14px;margin-top:6px}
+  .stats{margin-top:22px;background:rgba(255,255,255,.06);border-radius:16px;padding:16px 18px}
+  .stats h3{margin:0 0 10px;font-size:15px;letter-spacing:1.5px;color:#9fd8ea}
+  .bars{display:grid;grid-template-columns:repeat(2,1fr);gap:8px 28px}
+  .bar{display:grid;grid-template-columns:200px 1fr 34px;align-items:center;gap:10px;font-size:15px}
+  .bar .t{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .bar .track{height:12px;background:rgba(255,255,255,.1);border-radius:6px;overflow:hidden}
+  .bar .fill{height:100%;background:var(--sky);border-radius:6px;transition:width .6s}
+  .bar .n{text-align:right;font-weight:700}
+  .grid{margin-top:22px;display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:16px}
+  .wc{background:#fff;color:var(--ink);border-radius:16px;overflow:hidden}
+  .wc.new{animation:pop .9s ease}
+  @keyframes pop{0%{transform:scale(.85);opacity:0;box-shadow:0 0 0 0 rgba(0,170,210,.9)}60%{transform:scale(1.03);opacity:1}100%{transform:scale(1);box-shadow:0 0 0 10px rgba(0,170,210,0)}}
+  .wc-h{display:flex;align-items:center;gap:12px;background:var(--navy);color:#fff;padding:12px 14px}
+  .wc-h .av{font-size:34px;line-height:1}
+  .wc-h .nm{font-weight:700;font-size:18px;line-height:1.2}
+  .wc-h .dp{font-size:12.5px;color:#cfe3f0}
+  .wc-i{padding:9px 14px;border-top:1px solid #eee;font-size:14px}
+  .wc-i:first-of-type{border-top:0}
+  .wc-i .w{font-weight:700;color:var(--navy)}
+  .wc-i .a{color:#333;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;word-break:break-word}
+  .empty{text-align:center;color:#9fd8ea;font-size:20px;padding:60px 0}
+
+  @media (max-width:820px){
+    .wall-wrap{padding:16px}
+    .wall-top{flex-direction:column}
+    .wall-title h1{font-size:28px}
+    .bars{grid-template-columns:1fr}
+    .bar{grid-template-columns:150px 1fr 30px;font-size:14px}
+    .grid{grid-template-columns:1fr}
+  }
+</style>
+</head>
+<body>
+
+<!-- ================= PARTICIPANT ================= -->
+<div id="participant" class="app hidden">
+  <header class="top">
+    <div class="eyebrow">HYUNDAI WAY · 30-DAY COMMITMENT</div>
+    <h1 id="topTitle">My Hyundai Way</h1>
+    <p id="topSub">เลือก 3 Way ที่สำคัญที่สุดสำหรับคุณ แล้วตั้งใจลงมือทำจริง 30 วัน</p>
+    <div class="steps"><span id="st1" class="on"></span><span id="st2"></span><span id="st3"></span></div>
+  </header>
+
+  <!-- Step 1: profile -->
+  <section id="step1" class="panel">
+    <h2>1. แนะนำตัว</h2>
+    <p class="sub">ข้อมูลนี้จะแสดงบนการ์ดของคุณ</p>
+
+    <label class="f" for="fullName">ชื่อจริง – นามสกุล</label>
+    <input id="fullName" class="in" maxlength="100" autocomplete="name" placeholder="เช่น สมชาย ใจดี">
+
+    <label class="f" for="nickname">ชื่อเล่น</label>
+    <input id="nickname" class="in" maxlength="40" placeholder="เช่น ชาย">
+
+    <label class="f" for="dept">แผนก</label>
+    <input id="dept" class="in" maxlength="80" placeholder="เช่น Sales, Service, HR & GA">
+
+    <label class="f">เลือก Icon ของคุณ</label>
+    <div id="icons" class="icons"></div>
+
+    <div id="err1" class="err"></div>
+    <button id="next1" class="btn">ถัดไป →</button>
+  </section>
+
+  <!-- Step 2: pick 3 ways -->
+  <section id="step2" class="hidden">
+    <div class="panel" style="padding-bottom:12px">
+      <h2>2. เลือก 3 Priorities ของคุณ</h2>
+      <p class="sub" style="margin-bottom:0">แตะเลือก 3 ข้อ (ไม่ต้องเรียงลำดับ) แล้วเขียนว่าใน 30 วันข้างหน้า คุณจะทำอะไร <b>เป็นประจำ</b></p>
+    </div>
+    <div class="counter">
+      <b id="countTxt">เลือกแล้ว 0 / 3</b>
+      <div class="dots"><i id="d1"></i><i id="d2"></i><i id="d3"></i></div>
+    </div>
+    <div id="ways"></div>
+    <div id="err2" class="err"></div>
+    <div class="row" style="margin-top:14px">
+      <button id="back2" class="btn ghost" style="flex:0 0 32%">← กลับ</button>
+      <button id="submitBtn" class="btn" disabled>Submit</button>
+    </div>
+  </section>
+
+  <!-- Step 3: result -->
+  <section id="step3" class="hidden">
+    <div id="myCard"></div>
+    <button id="saveImg" class="btn sky">📷 บันทึกการ์ดเป็นรูป</button>
+
+    <div class="panel">
+      <h2>✉️ ส่งการ์ดเข้าอีเมลของคุณ</h2>
+      <p class="sub">เก็บไว้เตือนตัวเองตลอด 30 วัน</p>
+      <input id="email" class="in" type="email" inputmode="email" autocomplete="email" placeholder="name@company.com">
+      <div class="note"><span>⚠️</span><span><b>อีเมลอาจไปอยู่ใน Junk / Spam</b><br>หากไม่พบใน Inbox ภายใน 2–3 นาที กรุณาเช็คโฟลเดอร์ Junk, Spam หรือ Promotions และกด “Not Junk / ไม่ใช่สแปม”</span></div>
+      <div id="err3" class="err"></div>
+      <div id="ok3" class="okmsg hidden"></div>
+      <button id="sendEmail" class="btn">ส่งเข้าอีเมล</button>
+    </div>
+
+    <div class="panel" style="text-align:center">
+      <div style="font-size:30px">👀</div>
+      <b style="color:var(--navy)">ดูการ์ดของคุณและเพื่อน ๆ บนจอหน้าห้องได้เลย!</b>
+    </div>
+    <button id="editBtn" class="btn ghost">✏️ แก้ไขคำตอบ</button>
+    <button id="restart" class="link">ไม่ใช่การ์ดของคุณ? เริ่มใหม่</button>
+  </section>
+</div>
+
+<!-- ================= WALL (projector) ================= -->
+<div id="wall" class="wall-wrap hidden">
+  <div class="wall-top">
+    <div class="wall-title">
+      <div class="eyebrow">HYUNDAI WAY · 30-DAY COMMITMENT</div>
+      <h1>Our Hyundai Way Commitments</h1>
+      <div class="live"><i></i> อัปเดตสด <span id="updated"></span></div>
+    </div>
+    <div style="display:flex;flex-direction:column;justify-content:center;padding:0 8px">
+      <div class="count"><span id="total">0</span> <small>commitments</small></div>
+    </div>
+    <div class="qrbox"><div id="qr"></div><b>สแกนเพื่อร่วม Commit</b></div>
+  </div>
+  <div class="stats"><h3>WAYS ที่ถูกเลือกมากที่สุด</h3><div id="bars" class="bars"></div></div>
+  <div id="grid" class="grid"></div>
+  <div id="empty" class="empty">รอการ์ดใบแรก… สแกน QR Code ได้เลย 📱</div>
+</div>
+
+<div id="modal" class="modal hidden">
+  <img id="modalImg" alt="Commitment card">
+  <p>กดค้างที่รูป แล้วเลือก “บันทึกรูปภาพ”</p>
+  <button id="closeModal" class="btn ghost" style="color:#fff;border-color:#fff">ปิด</button>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<script>
+/* ================= CONFIG ================= */
+const CORES = [
+  { key:'CUSTOMER',      th:'ลูกค้ามาก่อนในทุกการตัดสินใจ' },
+  { key:'CHALLENGE',     th:'ท้าทายตัวเองในทุกโอกาส' },
+  { key:'COLLABORATION', th:'สำเร็จได้มากกว่าด้วยการร่วมมือ' },
+  { key:'PEOPLE',        th:'เคารพกันและเติบโตไปด้วยกัน' },
+  { key:'GLOBALITY',     th:'มุ่งเป็นที่หนึ่งของโลกในสิ่งที่ทำ' },
+];
+const WAYS = [
+  { key:'Safety & Quality',      core:'CUSTOMER',      icon:'🛡️', th:'ให้ความสำคัญกับความปลอดภัยและคุณภาพเหนือสิ่งอื่นใด เพื่อสร้างความไว้วางใจให้ลูกค้า' },
+  { key:'Tenacity',              core:'CUSTOMER',      icon:'🎯', th:'เป็นเจ้าของปัญหาอย่างมืออาชีพ และมุ่งมั่นหาทางออกที่ดีที่สุดจนสำเร็จ' },
+  { key:'Progress',              core:'CHALLENGE',     icon:'🚀', th:'ขับเคลื่อนนวัตกรรมด้วยการทดลองเล็ก ๆ และการก้าวกระโดดอย่างกล้าหาญ' },
+  { key:'Agility',               core:'CHALLENGE',     icon:'⚡', th:'ปรับตัวต่อการเปลี่ยนแปลงอย่างยืดหยุ่น และลงมืออย่างรวดเร็ว' },
+  { key:'Alignment',             core:'COLLABORATION', icon:'🤝', th:'ร่วมกันรับความท้าทาย และมุ่งมั่นไปสู่เป้าหมายเดียวกัน' },
+  { key:'Resilience',            core:'COLLABORATION', icon:'💪', th:'ให้กำลังใจและเสริมพลังกันด้วยจิตวิญญาณ “ทำได้”' },
+  { key:'Diversity & Inclusion', core:'PEOPLE',        icon:'🌈', th:'เปิดรับความหลากหลาย ค้นพบคุณค่าใหม่จากความคิดและประสบการณ์ของกันและกัน' },
+  { key:'Expertise',             core:'GLOBALITY',     icon:'🏆', th:'เป็นเลิศในสิ่งที่ทำ และผลักดันขีดจำกัดของตัวเองเสมอ' },
+  { key:'Integrity',             core:'GLOBALITY',     icon:'💎', th:'ภูมิใจในงานของเรา และยึดมั่นในความซื่อสัตย์และโปร่งใส' },
+  { key:'Data-Driven Thinking',  core:'GLOBALITY',     icon:'📊', th:'ใช้ข้อมูลเพื่อคาดการณ์และเตรียมพร้อมสำหรับลูกค้าและตลาดทั่วโลก' },
+];
+const WAY_BY_KEY = Object.fromEntries(WAYS.map(w => [w.key, w]));
+const ICONS = ['😀','😎','🤓','🥳','😇','🤩','🦁','🐯','🐼','🦊','🐨','🐶','🐱','🦄','🐧','🦉','🌟','🔥','🌻','🍀','⚡','🚗','🎸','☕'];
+const PRE = 'ใน 30 วันข้างหน้า ฉันจะทำ', POST = 'เป็นประจำ';
+const STORE_KEY = 'hw_commitment_v1';
+
+/* ================= BACKEND BRIDGE ================= */
+const IS_GAS = typeof google !== 'undefined' && google.script && google.script.run;
+function call(fn, ...args){
+  return new Promise((resolve, reject) => {
+    if (IS_GAS) google.script.run.withSuccessHandler(resolve).withFailureHandler(e => reject(e))[fn](...args);
+    else setTimeout(() => { try { resolve(Mock[fn](...args)); } catch(e){ reject(e); } }, 400);
+  });
+}
+function getParams(){
+  return new Promise(res => {
+    if (IS_GAS) google.script.url.getLocation(loc => res(loc.parameter || {}));
+    else res(Object.fromEntries(new URLSearchParams(location.search)));
+  });
+}
+/* Local preview only (when not running inside Apps Script) */
+const Mock = (() => {
+  const fmt = d => d.toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'});
+  const items = [
+    { id:'demo1', ts:Date.now()-60000, nickname:'Ploy', fullName:'Jiraporn R.', department:'Sales', icon:'🦊',
+      picks:[{way:'Tenacity',action:'ติดตามเคสลูกค้าที่ค้างจนปิดได้ทุกวันศุกร์'},{way:'Alignment',action:'ประชุมสั้น 15 นาทีกับทีม Service ทุกเช้าวันจันทร์'},{way:'Data-Driven Thinking',action:'ดู Dashboard ยอดขายก่อนตัดสินใจทุกครั้ง'}] },
+    { id:'demo2', ts:Date.now()-30000, nickname:'Ton', fullName:'Tana T.', department:'Service', icon:'🦁',
+      picks:[{way:'Safety & Quality',action:'ตรวจ Checklist ความปลอดภัยหน้างานกับทีมทุกเช้า'},{way:'Resilience',action:'ชมลูกทีมอย่างน้อยวันละ 1 คน'},{way:'Progress',action:'ทดลองไอเดียปรับปรุงงานเล็ก ๆ สัปดาห์ละ 1 เรื่อง'}] },
+  ];
+  return {
+    submitCommitment(p){
+      const old = p.id && items.find(x => x.id === p.id);
+      if (old) { Object.assign(old, { fullName:p.fullName, nickname:p.nickname, department:p.department, icon:p.icon,
+        picks:p.picks, ts:Date.now(), edits:(old.edits||0)+1 }); return { ...old }; }
+      const now = new Date(), due = new Date(Date.now()+30*864e5);
+      const rec = { id:'m'+Date.now(), ts:Date.now(), fullName:p.fullName, nickname:p.nickname, department:p.department,
+        icon:p.icon, picks:p.picks, createdAt:fmt(now), dueDate:fmt(due), edits:0 };
+      items.unshift(rec); return { ...rec };
+    },
+    sendCommitmentEmail(id, email){ if(!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email)) throw new Error('รูปแบบอีเมลไม่ถูกต้อง'); return { ok:true, email }; },
+    getAllCommitments(){ return { total:items.length, items:items.slice().sort((a,b)=>b.ts-a.ts), updatedAt:new Date().toLocaleTimeString('en-GB') }; },
+    getAppUrl(){ return location.href.split('?')[0]; },
+  };
+})();
+
+/* ================= UTIL ================= */
+const $ = id => document.getElementById(id);
+const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const errMsg = e => (e && e.message) ? e.message.replace(/^Exception:\s*/,'') : 'เกิดข้อผิดพลาด กรุณาลองใหม่';
+function toast(msg){
+  const t = document.createElement('div'); t.className = 'toast'; t.textContent = msg;
+  document.body.appendChild(t); setTimeout(() => t.remove(), 2600);
+}
+const store = {
+  get(){ try { return JSON.parse(localStorage.getItem(STORE_KEY)); } catch(e){ return null; } },
+  set(v){ try { localStorage.setItem(STORE_KEY, JSON.stringify(v)); } catch(e){} },
+  clear(){ try { localStorage.removeItem(STORE_KEY); } catch(e){} },
+};
+
+/* ================= PARTICIPANT ================= */
+const S = { icon:'', picks:[], drafts:{}, record:null };
+
+function showStep(n){
+  ['step1','step2','step3'].forEach((id,i) => $(id).classList.toggle('hidden', i+1 !== n));
+  [1,2,3].forEach(i => $('st'+i).classList.toggle('on', i <= n));
+  if (n === 3){ $('topTitle').textContent = 'My Commitment Card'; $('topSub').textContent = 'สัญญากับตัวเอง 30 วัน — ลงมือทำให้เป็นนิสัย'; }
+  else { $('topTitle').textContent = 'My Hyundai Way'; $('topSub').textContent = 'เลือก 3 Way ที่สำคัญที่สุดสำหรับคุณ แล้วตั้งใจลงมือทำจริง 30 วัน'; }
+  window.scrollTo(0,0);
+}
+
+function initParticipant(){
+  $('participant').classList.remove('hidden');
+  $('icons').innerHTML = ICONS.map(i => `<button type="button" data-i="${i}">${i}</button>`).join('');
+  $('icons').onclick = e => {
+    const b = e.target.closest('button'); if (!b) return;
+    S.icon = b.dataset.i;
+    [...$('icons').children].forEach(x => x.classList.toggle('sel', x === b));
+  };
+  $('next1').onclick = () => { const p = readProfile(); if (p) { renderWays(); showStep(2); } };
+  $('back2').onclick = () => showStep(1);
+  $('submitBtn').onclick = submit;
+  $('sendEmail').onclick = sendEmail;
+  $('saveImg').onclick = saveImage;
+  $('editBtn').onclick = startEdit;
+  $('closeModal').onclick = () => $('modal').classList.add('hidden');
+  $('restart').onclick = () => {
+    if (!confirm('ล้างการ์ดบนเครื่องนี้ แล้วเริ่มกรอกใหม่?')) return;
+    store.clear(); location.reload();
+  };
+
+  const saved = store.get();
+  if (saved && saved.id) { S.record = saved; showResult(); }
+  else showStep(1);
+}
+
+function readProfile(){
+  const fullName = $('fullName').value.trim();
+  const nickname = $('nickname').value.trim();
+  const department = $('dept').value.trim();
+  let e = '';
+  if (fullName.length < 2) e = 'กรุณากรอกชื่อจริง – นามสกุล';
+  else if (!nickname) e = 'กรุณากรอกชื่อเล่น';
+  else if (!department) e = 'กรุณากรอกแผนก';
+  else if (!S.icon) e = 'กรุณาเลือก Icon ของคุณ';
+  $('err1').textContent = e;
+  return e ? null : { fullName, nickname, department, icon:S.icon };
+}
+
+function renderWays(){
+  const full = S.picks.length >= 3;
+  $('ways').innerHTML = CORES.map(c => `
+    <div class="core">
+      <div class="core-h"><b>${c.key}</b><small>${esc(c.th)}</small></div>
+      ${WAYS.filter(w => w.core === c.key).map(w => {
+        const idx = S.picks.indexOf(w.key), sel = idx >= 0;
+        return `<div class="way ${sel ? 'sel' : (full ? 'dim' : '')}" data-way="${esc(w.key)}">
+          <button type="button" class="way-head">
+            <span class="way-ico">${w.icon}</span>
+            <span class="way-txt"><b>${esc(w.key)}</b><small>${esc(w.th)}</small></span>
+            <span class="rank">${sel ? '✓' : ''}</span>
+          </button>
+          ${sel ? `<div class="way-action"><div class="sentence">
+            <div class="pre">${PRE}…</div>
+            <textarea maxlength="500" placeholder="เช่น คุยงานแบบ 1-on-1 กับลูกทีมทุกสัปดาห์">${esc(S.drafts[w.key] || '')}</textarea>
+            <div class="post">…${POST}</div>
+          </div><div class="hint">เขียนสิ่งที่ทำได้จริง เจาะจง และทำซ้ำได้ (ใคร / อะไร / บ่อยแค่ไหน)</div></div>` : ''}
+        </div>`;
+      }).join('')}
+    </div>`).join('');
+  updateCounter();
+}
+
+document.addEventListener('click', e => {
+  const head = e.target.closest('#ways .way-head'); if (!head) return;
+  const key = head.parentElement.dataset.way;
+  const idx = S.picks.indexOf(key);
+  if (idx >= 0) S.picks.splice(idx, 1);
+  else if (S.picks.length >= 3) { toast('เลือกได้ 3 ข้อ — แตะข้อที่เลือกแล้วเพื่อยกเลิก'); return; }
+  else S.picks.push(key);
+  renderWays();
+  if (idx < 0) {
+    const ta = document.querySelector(`.way[data-way="${CSS.escape(key)}"] textarea`);
+    if (ta) setTimeout(() => ta.focus({preventScroll:false}), 50);
+  }
+});
+document.addEventListener('input', e => {
+  if (!e.target.matches('#ways textarea')) return;
+  S.drafts[e.target.closest('.way').dataset.way] = e.target.value;
+  updateCounter();
+});
+
+const sortPicks = keys => keys.slice().sort((a,b) => WAYS.findIndex(w => w.key===a) - WAYS.findIndex(w => w.key===b));
+
+function updateCounter(){
+  const n = S.picks.length;
+  $('countTxt').textContent = `เลือกแล้ว ${n} / 3`;
+  [1,2,3].forEach(i => { const d = $('d'+i); d.classList.toggle('on', i <= n); d.textContent = i <= n ? '✓' : ''; });
+  const missing = S.picks.filter(k => (S.drafts[k] || '').trim().length < 5);
+  const btn = $('submitBtn');
+  btn.disabled = n !== 3 || missing.length > 0;
+  btn.textContent = n < 3 ? `เลือกอีก ${3-n} ข้อ` : missing.length ? `เขียน Action อีก ${missing.length} ข้อ` : (S.record ? 'บันทึกคำตอบใหม่ ✓' : 'Submit ✓');
+}
+
+async function submit(){
+  const profile = readProfile();
+  if (!profile) { showStep(1); return; }
+  const btn = $('submitBtn');
+  btn.disabled = true; btn.innerHTML = '<span class="spin"></span>กำลังส่ง…'; $('err2').textContent = '';
+  try {
+    const rec = await call('submitCommitment', { ...profile, picks: sortPicks(S.picks).map(k => ({ way:k, action:S.drafts[k].trim() })), id: S.record ? S.record.id : '' });
+    const wasEdit = !!(S.record && S.record.id);
+    S.record = rec; store.set(rec); showResult();
+    if (wasEdit) toast('บันทึกคำตอบใหม่แล้ว ✓');
+  } catch(e){
+    $('err2').textContent = errMsg(e); updateCounter();
+  }
+}
+
+function cardHTML(r){
+  return `<div class="ccard" id="cardEl">
+    <div class="ccard-h">
+      <div class="eyebrow">MY HYUNDAI WAY · 30-DAY COMMITMENT</div>
+      <div class="av">${esc(r.icon)}</div>
+      <div class="nick">${esc(r.nickname)}</div>
+      <div class="meta">${esc(r.fullName)} · ${esc(r.department)}</div>
+    </div>
+    ${r.picks.map(p => `<div class="ccard-i">
+      <div class="wn">${WAY_BY_KEY[p.way]?.icon || ''} ${esc(p.way)}</div>
+      <div class="ac">${PRE} <b>${esc(p.action)}</b> ${POST}</div>
+    </div>`).join('')}
+    <div class="ccard-f">เริ่ม ${esc(r.createdAt)} &nbsp;→&nbsp; <b>ครบ 30 วัน ${esc(r.dueDate)}</b></div>
+  </div>`;
+}
+
+function startEdit(){
+  const r = S.record; if (!r) return;
+  $('fullName').value = r.fullName; $('nickname').value = r.nickname; $('dept').value = r.department;
+  S.icon = r.icon;
+  [...$('icons').children].forEach(x => x.classList.toggle('sel', x.dataset.i === r.icon));
+  S.picks = r.picks.map(p => p.way);
+  S.drafts = Object.fromEntries(r.picks.map(p => [p.way, p.action]));
+  $('err1').textContent = ''; $('err2').textContent = '';
+  showStep(1);
+  toast('แก้ไขได้เลย แล้วกด Submit อีกครั้ง');
+}
+
+function showResult(){
+  $('myCard').innerHTML = cardHTML(S.record);
+  showStep(3);
+}
+
+async function sendEmail(){
+  const email = $('email').value.trim();
+  $('err3').textContent = ''; $('ok3').classList.add('hidden');
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email)) { $('err3').textContent = 'กรุณากรอกอีเมลให้ถูกต้อง'; return; }
+  const btn = $('sendEmail'); btn.disabled = true; btn.innerHTML = '<span class="spin"></span>กำลังส่ง…';
+  try {
+    await call('sendCommitmentEmail', S.record.id, email);
+    $('ok3').textContent = `✅ ส่งแล้วไปที่ ${email} — ถ้าไม่เห็นใน Inbox อย่าลืมเช็ค Junk / Spam นะ`;
+    $('ok3').classList.remove('hidden');
+    btn.textContent = 'ส่งอีกครั้ง';
+  } catch(e){
+    $('err3').textContent = errMsg(e); btn.textContent = 'ส่งเข้าอีเมล';
+  } finally { btn.disabled = false; }
+}
+
+async function saveImage(){
+  const el = $('cardEl'); if (!el || typeof html2canvas === 'undefined') { toast('บันทึกรูปไม่ได้ ลองแคปหน้าจอแทนนะ'); return; }
+  const btn = $('saveImg'); btn.disabled = true; btn.innerHTML = '<span class="spin"></span>กำลังสร้างรูป…';
+  try {
+    const canvas = await html2canvas(el, { scale:2, backgroundColor:'#F6F3F2', useCORS:true });
+    $('modalImg').src = canvas.toDataURL('image/png');
+    $('modal').classList.remove('hidden');
+  } catch(e){ toast('บันทึกรูปไม่ได้ ลองแคปหน้าจอแทนนะ'); }
+  finally { btn.disabled = false; btn.textContent = '📷 บันทึกการ์ดเป็นรูป'; }
+}
+
+/* ================= WALL ================= */
+const W = { seen:new Set(), first:true, busy:false };
+
+async function initWall(){
+  document.body.classList.add('wall');
+  $('wall').classList.remove('hidden');
+  document.title = 'Hyundai Way – Live Wall';
+  try {
+    const url = await call('getAppUrl');
+    if (url && typeof QRCode !== 'undefined') new QRCode($('qr'), { text:url, width:320, height:320, correctLevel:QRCode.CorrectLevel.M });
+  } catch(e){}
+  refreshWall();
+  setInterval(refreshWall, 5000);
+}
+
+async function refreshWall(){
+  if (W.busy) return; W.busy = true;
+  try {
+    const data = await call('getAllCommitments');
+    renderWall(data);
+  } catch(e){ /* keep last view */ }
+  finally { W.busy = false; }
+}
+
+function renderWall(data){
+  const items = data.items || [];
+  $('total').textContent = items.length;
+  $('updated').textContent = data.updatedAt ? '· ' + data.updatedAt : '';
+  $('empty').classList.toggle('hidden', items.length > 0);
+
+  const counts = Object.fromEntries(WAYS.map(w => [w.key, 0]));
+  items.forEach(it => it.picks.forEach(p => { if (p.way in counts) counts[p.way]++; }));
+  const max = Math.max(1, ...Object.values(counts));
+  $('bars').innerHTML = WAYS.slice().sort((a,b) => counts[b.key] - counts[a.key]).map(w => `
+    <div class="bar"><span class="t">${w.icon} ${esc(w.key)}</span>
+      <span class="track"><span class="fill" style="width:${counts[w.key]/max*100}%"></span></span>
+      <span class="n">${counts[w.key]}</span></div>`).join('');
+
+  $('grid').innerHTML = items.map(it => {
+    const key = it.id + ':' + (it.edits || 0);
+    const isNew = !W.first && !W.seen.has(key);
+    return `<div class="wc ${isNew ? 'new' : ''}">
+      <div class="wc-h"><span class="av">${esc(it.icon)}</span>
+        <div><div class="nm">${esc(it.nickname)}</div><div class="dp">${esc(it.fullName)} · ${esc(it.department)}</div></div></div>
+      ${it.picks.map(p => `<div class="wc-i"><div class="w">${WAY_BY_KEY[p.way]?.icon || ''} ${esc(p.way)}</div>
+        <div class="a">${esc(p.action)}</div></div>`).join('')}
+    </div>`;
+  }).join('');
+  items.forEach(it => W.seen.add(it.id + ':' + (it.edits || 0)));
+  W.first = false;
+}
+
+/* ================= BOOT ================= */
+getParams().then(p => (p.view === 'wall' ? initWall() : initParticipant()));
+</script>
+</body>
+</html>
